@@ -4,10 +4,11 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User';
 
 export const register = async (req: Request, res: Response): Promise<void> => {
-  const { name, lastName, email, phone, password } = req.body;
+  const { name, lastName, email, phone, password, role } = req.body;
   try {
     const existingUser = await User.findOne({ email });
-    const existingPhone = await User.findOne({ phone});
+    const existingPhone = await User.findOne({ phone });
+
     if (existingUser) {
       res.status(400).json({ message: 'Email already in use' });
       return;
@@ -18,7 +19,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, lastName, email, phone, password: hashedPassword });
+    const newUser = new User({ name, lastName, email, phone, role, password: hashedPassword });
     await newUser.save();
 
     res.status(201).json({ message: 'User registered successfully' });
@@ -45,6 +46,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
     res.json({ token });
+    
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).json({ message: 'Error logging in', error });
