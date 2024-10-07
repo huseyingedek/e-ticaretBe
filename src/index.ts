@@ -20,8 +20,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 mongoose
   .connect(process.env.MONGO_URL!, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+
   } as mongoose.ConnectOptions)
   .then(() => console.log('MongoDB connected'))
   .catch((error) => console.log(error));
