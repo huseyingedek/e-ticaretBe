@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import RefreshToken from '../models/refreshToken';
+import Role from '../models/Role';
 import crypto from 'crypto';
 
 const generateRefreshToken = (userId: string) => {
@@ -34,8 +35,16 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    const roleName= role || 'user';
+
+    const roleDoc = await Role.findOne({ name: roleName });
+    if (!roleDoc) {
+      res.status(400).json({ message: 'Role not found' });
+      return;
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, lastName, email, phone, role, password: hashedPassword });
+    const newUser = new User({ name, lastName, email, phone, role: roleDoc._id, password: hashedPassword });
     await newUser.save();
 
     res.status(201).json({ message: 'User registered successfully' });
@@ -82,26 +91,3 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: 'Error logging out', error });
   }
 };
-
-export const getProfileInfo = async (req: Request, res: Response): Promise<void> => {
-  const { userId } = req.params;
-  const { user } = req.body;
-  
-  if (user.id !== userId) {
-    res.status(403).json({ message: 'Access denied' });
-    return;
-  }
-
-  try {
-    const userProfile = await User.findById(userId).select('-password');
-    if (!userProfile) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-    res.json(userProfile);
-  } catch (error) {
-    console.error('Error getting profile info:', error);
-    res.status(500).json({ message: 'Error getting profile info', error });
-  }
-};
-
