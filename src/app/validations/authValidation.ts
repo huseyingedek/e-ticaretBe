@@ -44,8 +44,8 @@ export const loginSchema = Joi.object({
     'string.empty': 'Email boş olamaz',
     'any.required': 'Email gereklidir',
   }),
-  password: Joi.string().min(6).required().messages({
-    'string.min': 'Şifre en az 6 karakter olmalıdır',
+  password: Joi.string().min(3).required().messages({
+    'string.min': 'Şifre en az 3 karakter olmalıdır',
     'string.empty': 'Şifre boş olamaz',
     'any.required': 'Şifre gereklidir',
   }),

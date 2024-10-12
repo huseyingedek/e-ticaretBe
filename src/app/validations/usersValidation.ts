@@ -61,4 +61,8 @@ export const userSchema = Joi.object({
             'string.pattern.base': 'Geçerli bir telefon numarası girin (10 hane)',
             'string.empty': 'Telefon numarası boş olamaz',
         }),
+    password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).optional().messages({
+        'string.pattern.base': 'Şifre en az 3 karakter olmalıdır',
+        'string.empty': 'Şifre boş olamaz',
+    }),
 });
