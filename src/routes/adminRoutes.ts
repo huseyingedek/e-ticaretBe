@@ -13,5 +13,4 @@ router.put('/updateUser/:userId', authMiddleware, checkRole(['admin']), validate
 router.get('/listUsers', authMiddleware, checkRole(['admin']), listUsers);
 router.delete('/deleteUser/:userId', authMiddleware, checkRole(['admin']), deleteUser);
 
-
 export default router;
