@@ -33,6 +33,11 @@ export const registerSchema = Joi.object({
     'string.empty': 'Şifre boş olamaz',
     'any.required': 'Şifre gereklidir',
   }),
+  confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+    'any.only': 'Şifreler eşleşmiyor',
+    'string.empty': 'Şifre onayı boş olamaz',
+    'any.required': 'Şifre onayı gereklidir',
+  }),
   role: Joi.string().valid('user', 'admin').optional().messages({
     'string.base': 'Rol bir metin olmalıdır',
   }),
