@@ -21,8 +21,13 @@ const generateRefreshToken = (userId: string) => {
 };
 
 export const register = async (req: Request, res: Response): Promise<void> => {
-  const { name, lastName, email, phone, password, role } = req.body;
+  const { name, lastName, email, phone, password, confirmPassword, role } = req.body;
   try {
+    if (password !== confirmPassword) {
+      res.status(400).json({ message: 'Passwords do not match' });
+      return;
+    }
+
     const existingUser = await User.findOne({ email });
     const existingPhone = await User.findOne({ phone });
 
@@ -35,7 +40,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const roleName= role || 'user';
+    const roleName = role || 'user';
 
     const roleDoc = await Role.findOne({ name: roleName });
     if (!roleDoc) {
