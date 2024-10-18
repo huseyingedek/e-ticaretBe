@@ -26,6 +26,17 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
     }
 };
 
+export const getProductById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { productId } = req.params;
+        const product = await Product.findById(productId);
+        res.json({ product });
+    } catch (error) {
+        console.error('Error getting product by id:', error);
+        res.status(500).json({ message: 'Error getting product by id', error });
+    }
+}
+
 export const updateProducts = async (req: Request, res: Response): Promise<void> => {
     try {
         const { productId } = req.params;

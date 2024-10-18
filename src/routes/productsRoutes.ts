@@ -8,7 +8,8 @@ import validate from '../app/middleware/validate';
 const router = express.Router();
 
 router.post('/addproduct', authMiddleware, checkRole(['admin']), addProducts);
-router.get('/listproducts', authMiddleware, checkRole(['admin']), listProducts);
+router.get('/listproducts', listProducts);
+router.get('/listproducts/:productId', listProducts);
 router.put('/updateproduct/:productId', authMiddleware, checkRole(['admin']), updateProducts);
 router.delete('/deleteproduct/:productId', authMiddleware, checkRole(['admin']), deleteProducts);
 
