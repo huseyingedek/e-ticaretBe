@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/usersRoutes';
 import adminRoutes from './routes/adminRoutes';
+import productsRoutes from './routes/productsRoutes';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/products', productsRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
