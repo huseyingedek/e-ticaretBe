@@ -34,6 +34,18 @@ export const updateProfileInfo = async (req: Request, res: Response): Promise<vo
   }
 
   try {
+    const existingPhoneUser = await User.findOne({ phone });
+    if (existingPhoneUser && existingPhoneUser._id.toString() !== userId) {
+      res.status(400).json({ message: 'Bu telefon numarası zaten kullanılıyor.' });
+      return;
+    }
+
+    const existingEmailUser = await User.findOne({ email });
+    if (existingEmailUser && existingEmailUser._id.toString() !== userId) {
+      res.status(400).json({ message: 'Bu email adresi zaten kullanılıyor.' });
+      return;
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { name, lastName, email, phone },
